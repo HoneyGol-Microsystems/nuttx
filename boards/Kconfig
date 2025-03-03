@@ -1141,6 +1141,15 @@ config ARCH_BOARD_MOXA
 	---help---
 		Moxa
 
+config ARCH_BOARD_NEXYS_VIDEO_VESP
+	bool "DIGILENT Nexys Video board"
+	depends on ARCH_CHIP_VESP
+	select ARCH_HAVE_LEDS
+	select ARCH_HAVE_BUTTONS
+	---help---
+		This is the board configuration for the port of NuttX to the Digilent Nexys
+		Video board. This board features the VESP-beta SoC.
+
 config ARCH_BOARD_NE64BADGE
 	bool "FEG NE64 /PoE Badge board"
 	depends on ARCH_CHIP_MCS92S12NEC64
@@ -3392,6 +3401,7 @@ config ARCH_BOARD
 	default "misoc"                     if ARCH_BOARD_MISOC_QEMU || ARCH_BOARD_MISOC_VERILATOR
 	default "mizar32a"                  if ARCH_BOARD_MIZAR32A
 	default "moteino-mega"              if ARCH_BOARD_MOTEINO_MEGA
+	default "nexys-video-vesp"          if ARCH_BOARD_NEXYS_VIDEO_VESP
 	default "ne64badge"                 if ARCH_BOARD_NE64BADGE
 	default "nrf52-feather"             if ARCH_BOARD_NRF52_FEATHER
 	default "nrf52832-sparkfun"         if ARCH_BOARD_NRF52832_SPARKFUN
@@ -4493,6 +4503,9 @@ source "boards/risc-v/esp32c3-legacy/esp32c3-devkit-rust-1/Kconfig"
 endif
 if ARCH_BOARD_ESP32C3_GENERIC
 source "boards/risc-v/esp32c3/esp32c3-generic/Kconfig"
+endif
+if ARCH_BOARD_NEXYS_VIDEO_VESP
+source "boards/risc-v/vesp/nexys-video-vesp/Kconfig"
 endif
 if ARCH_BOARD_ESP32S2_KALUGA_1
 source "boards/xtensa/esp32s2/esp32s2-kaluga-1/Kconfig"

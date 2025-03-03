@@ -353,6 +353,16 @@ config ARCH_CHIP_RISCV_CUSTOM
 	---help---
 		Select this option if there is no directory for the chip under arch/risc-v/src/.
 
+config ARCH_CHIP_VESP
+	bool "VESP-beta SoC"
+	select ARCH_RV32
+	select ARCH_RV_ISA_M
+	select ARCH_HAVE_RESET
+	select ARCH_HAVE_DEBUG
+	select ARCH_HAVE_TICKLESS
+	---help---
+		VESP-beta SoC.
+
 endchoice # RISC-V chip selection
 
 config ARCH_RV32
@@ -500,6 +510,7 @@ config ARCH_CHIP
 	default "bl808"                 if ARCH_CHIP_BL808
 	default "k230"                  if ARCH_CHIP_K230
 	default "sg2000"                if ARCH_CHIP_SG2000
+	default "vesp"                  if ARCH_CHIP_VESP
 
 config ARCH_RISCV_INTXCPT_EXTENSIONS
 	bool "RISC-V Integer Context Extensions"
@@ -739,5 +750,8 @@ source "arch/risc-v/src/k230/Kconfig"
 endif
 if ARCH_CHIP_SG2000
 source "arch/risc-v/src/sg2000/Kconfig"
+endif
+if ARCH_CHIP_VESP
+source "arch/risc-v/src/vesp/Kconfig"
 endif
 endif # ARCH_RISCV
