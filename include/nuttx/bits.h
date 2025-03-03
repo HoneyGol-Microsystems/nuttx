@@ -101,6 +101,52 @@
 #define find_first_bit(addr, size) find_next_bit(addr, size, 0)
 #define find_first_zero_bit(addr, size) find_next_zero_bit(addr, size, 0)
 
+
+#define __bf_shf(x) (__builtin_ffsll(x) - 1)
+
+/*
+* Example:
+*
+*  #define REG_FIELD_A  GENMASK(6, 0)
+*  #define REG_FIELD_B  BIT(7)
+*  #define REG_FIELD_C  GENMASK(15, 8)
+*  #define REG_FIELD_D  GENMASK(31, 16)
+*
+* Get:
+*  a = FIELD_GET(REG_FIELD_A, reg);
+*  b = FIELD_GET(REG_FIELD_B, reg);
+*
+* Set:
+*  reg = FIELD_PREP(REG_FIELD_A, 1) |
+*    FIELD_PREP(REG_FIELD_B, 0) |
+*    FIELD_PREP(REG_FIELD_C, c) |
+*    FIELD_PREP(REG_FIELD_D, 0x40);
+*
+* Modify:
+*    FIELD_SET(reg, REG_FIELD_D, 0x40);
+*
+* Note:
+*    FIELD_GET and FIELD_PREP are R-value expressions.
+*    FIELD_SET is statement.
+*    "({" "})" braces were removed since they are non-ISO C.
+*/
+
+#define FIELD_GET(_mask, _reg)                                  \
+    (                                                           \
+        (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask))  \
+    )
+
+#define FIELD_PREP(_mask, _val)                                 \
+    (                                                           \
+        ((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask)    \
+    )
+
+#define FIELD_SET(_reg, _mask, _val)      \
+    {                                     \
+        _reg &= ~_mask;                   \
+        _reg |= FIELD_PREP(_mask, _val);  \
+    }
+
 /****************************************************************************
  * Type Definitions
  ****************************************************************************/
