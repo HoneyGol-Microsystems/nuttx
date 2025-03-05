@@ -559,10 +559,8 @@ void riscv_serialinit(void)
  *   Provide priority, low-level access to support OS debug writes
  *
  ****************************************************************************/
-int up_putc(int ch)
+void up_putc(int ch)
 {
-  irqstate_t flags = enter_critical_section();
-
   /* Check for LF */
   if (ch == '\n')
   {
@@ -576,7 +574,4 @@ int up_putc(int ch)
   /* Wait until there is space for a byte in TX fifo */
   while(!(getreg32(VESP_UART0_FIFO) & VESP_UART_FIFO_TX_FIFO_READY));
   putreg32(ch, VESP_UART0_TXDATA);
-
-  leave_critical_section(flags);
-  return ch;
 }
